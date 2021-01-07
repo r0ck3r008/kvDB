@@ -1,8 +1,6 @@
 #ifndef PTREE_H
 #define PTREE_H
 
-#include<stdbool.h>
-
 /*
  * A type aliased structure which represents a single node in Prefix Tree.
  */
