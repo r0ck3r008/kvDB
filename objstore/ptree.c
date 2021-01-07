@@ -63,6 +63,23 @@ hash_it(char a)
     return a-'a';
 }
 
+/*
+ * Chop the given key and push it to the children.
+ * @param pnode: Pointer to Pnode whose children need to be recursed on.
+ * @param key: Character pointer to the key to be chopped.
+ * @param value: The value to pass along.
+ * @param len: Point where to chop.
+ * @return void.
+ */
+void
+chopPush(Pnode *pnode, char *key, char *value, int len)
+{
+    int indx = hash_it(key[len]);
+    char buf[512] = {0};
+    sprintf(buf, "%s", &(key[len]));
+    pnode->child[indx] = pnode_insert(pnode->child[indx], buf, value);
+}
+
 /* Pnode related functions */
 /*
  * An initializing function for Pnode. Allocates a new node and returns a pointer to it.
