@@ -198,6 +198,8 @@ pnode_find(Pnode *pnode, char *key)
             return pnode_find(pnode->child[indx], buf);
         }
 
+    } else if(pnode->value!=NULL) {
+        return pnode;
     } else {
         /* It is a node akin to root node, recurse to closest child */
         int indx = hash_it(key[0]);
