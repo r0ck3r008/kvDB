@@ -126,8 +126,16 @@ pnode_find(Pnode *pnode, char *key)
 }
 
 void
-pnode_deinit(Pnode *ptree)
+pnode_deinit(Pnode *pnode)
 {
+    for(int i=0; i<26; i++) {
+        if(pnode->child[i]!=NULL)
+            pnode_deinit(pnode->child[i]);
+    }
+    /* No NULL checks since free can digest NULLs */
+    free(pnode->key);
+    free(pnode->value);
+    free(pnode);
 }
 
 /* Ptree related functions */
