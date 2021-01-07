@@ -148,36 +148,3 @@ pnode_deinit(Pnode *pnode)
     free(pnode->value);
     free(pnode);
 }
-
-/* Ptree related functions */
-Ptree *
-ptree_init()
-{
-    Ptree *ptree = calloc(1, sizeof(Ptree));
-    if(ptree == NULL) {
-        fprintf(stderr, "[-]PTREE: Malloc: Error in allocating memory\n");
-        _exit(1);
-    }
-    ptree->root = pnode_init(NULL, NULL);
-
-    return ptree;
-}
-
-void
-ptree_insert(Ptree *ptree, char *key, char *value)
-{
-    pnode_insert(ptree->root, key, value);
-}
-
-Pnode *
-ptree_find(Ptree *ptree, char *key)
-{
-    return pnode_find(ptree->root, key);
-}
-
-void
-ptree_deinit(Ptree *ptree)
-{
-    pnode_deinit(ptree->root);
-    free(ptree);
-}
