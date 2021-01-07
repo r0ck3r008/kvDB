@@ -58,10 +58,12 @@ pnode_init(char *key, char *value)
     return pnode;
 }
 
-void
+Pnode *
 pnode_insert(Pnode *pnode, char *key, char *value)
 {
-    if (pnode->key!=NULL) {
+    if(pnode==NULL) {
+        pnode = pnode_init(key, value);
+    } else if (pnode->key!=NULL) {
         /* Determine chopping positions */
         int l1 = strlen(pnode->key), l2 = strlen(key),
             len = find_len(pnode->key, key, l1, l2),
@@ -69,29 +71,32 @@ pnode_insert(Pnode *pnode, char *key, char *value)
             indx2 = hash_it(key[len]);
         if(len == l1 && len == l2) {
             fprintf(stderr, "[-] Cannot Add duplicate keys!\n");
-            return;
+            _exit(1);
         }
         /* Form new children nodes */
         char buf1[512] = {0}, buf2[512] = {0};
         sprintf(buf1, "%s", &(pnode->key[len]));
         sprintf(buf2, "%s", &(key[len]));
-        pnode_insert(pnode->child[indx1], buf1, pnode->value);
-        pnode_insert(pnode->child[indx2], buf2, value);
+        pnode->child[indx1] = pnode_insert(pnode->child[indx1], buf1, pnode->value);
+        pnode->child[indx2] = pnode_insert(pnode->child[indx2], buf2, value);
         /* Update current node and cleanup as needed */
         char *old_key = pnode->key;
-        if(len) {
-            pnode->key = str_cpy(pnode->key, len-1);
-            pnode->value = NULL;
-        }
+        if(len)
+            pnode->key = str_cpy(pnode->key, len);
+        else
+            /* Since the keys completely differ, we seprate the two and make
+             * current key NULL
+             */
+            pnode->key = NULL;
+        pnode->value = NULL;
         free(pnode->value);
         free(old_key);
     } else {
         int indx = hash_it(key[0]);
-        if(pnode->child[indx]==NULL)
-            pnode->child[indx] = pnode_init(key, value);
-        else
-            return pnode_insert(pnode->child[indx], key, value);
+        pnode->child[indx] = pnode_insert(pnode->child[indx], key, value);
     }
+
+    return pnode;
 }
 
 Pnode *
@@ -126,7 +131,8 @@ pnode_find(Pnode *pnode, char *key)
 
     } else {
         /* It is a node akin to root node, recurse to closest child */
-        return pnode_find(pnode->child[key[0]%26], key);
+        int indx = hash_it(key[0]);
+        return pnode_find(pnode->child[indx], key);
     }
 }
 

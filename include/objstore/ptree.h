@@ -13,7 +13,7 @@ typedef struct Ptree {
 } Ptree;
 
 Pnode *pnode_init(char *, char *);
-void pnode_insert(Pnode *, char *, char *);
+Pnode *pnode_insert(Pnode *, char *, char *);
 Pnode *pnode_find(Pnode *, char *);
 void pnode_deinit(Pnode *);
 
