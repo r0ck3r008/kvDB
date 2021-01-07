@@ -63,9 +63,14 @@ pnode_insert(Pnode *pnode, char *key, char *value)
 {
     if (pnode->key!=NULL) {
         /* Determine chopping positions */
-        int len = find_len(pnode->key, key, strlen(pnode->key), strlen(key)),
+        int l1 = strlen(pnode->key), l2 = strlen(key),
+            len = find_len(pnode->key, key, l1, l2),
             indx1 = hash_it(pnode->key[len]),
             indx2 = hash_it(key[len]);
+        if(len == l1 && len == l2) {
+            fprintf(stderr, "[-] Cannot Add duplicate keys!\n");
+            return;
+        }
         /* Form new children nodes */
         char buf1[512] = {0}, buf2[512] = {0};
         sprintf(buf1, "%s", &(pnode->key[len]));
