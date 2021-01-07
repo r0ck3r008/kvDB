@@ -116,31 +116,44 @@ pnode_insert(Pnode *pnode, char *key, char *value)
     } else if (pnode->key!=NULL) {
         /* Determine chopping positions */
         int l1 = strlen(pnode->key), l2 = strlen(key),
-            len = find_len(pnode->key, key, l1, l2),
-            indx1 = hash_it(pnode->key[len]),
-            indx2 = hash_it(key[len]);
+            len = find_len(pnode->key, key, l1, l2);
         if(len == l1 && len == l2) {
             fprintf(stderr, "[-] Cannot Add duplicate keys!\n");
             _exit(1);
+        } else if(len == l1) {
+            /* Chop and push the new key further down and skip current one */
+            chopPush(pnode, key, value, len);
+        } else if(len == l2) {
+            /* Chop and push the curr key further down skipping new one and save new value here */
+            chopPush(pnode, pnode->key, pnode->value, len);
+            pnode->value = value;
+        } else {
+            /* Chop and push both current and new keys */
+            /* Form a new node */
+            Pnode *new_pnode;
+            if(len!=0) {
+                /* The first half of current key goes to new node */
+                char buf[512] = {0}, buf2[512] = {0};
+                snprintf(buf, len+1, "%s", pnode->key);
+                new_pnode = pnode_init(buf, NULL);
+                /* Second half goes to old node */
+                char *old_key = pnode->key;
+                sprintf(buf2, "%s", &(pnode->key[len]));
+                pnode->key = str_cpy(buf2, -1);
+                free(old_key);
+            } else {
+                /* Since len == 0, node key updation is required between new and old nodes */
+                new_pnode = pnode_init(NULL, NULL);
+            }
+            /* Push new key down the new node */
+            chopPush(new_pnode, key, value, len);
+            /* Make new node parent of old node */
+            int indx = hash_it(pnode->key[0]);
+            new_pnode->child[indx] = pnode;
+
+            /* Now return the new node */
+            pnode = new_pnode;
         }
-        /* Form new children nodes */
-        char buf1[512] = {0}, buf2[512] = {0};
-        sprintf(buf1, "%s", &(pnode->key[len]));
-        sprintf(buf2, "%s", &(key[len]));
-        pnode->child[indx1] = pnode_insert(pnode->child[indx1], buf1, pnode->value);
-        pnode->child[indx2] = pnode_insert(pnode->child[indx2], buf2, value);
-        /* Update current node and cleanup as needed */
-        char *old_key = pnode->key;
-        if(len)
-            pnode->key = str_cpy(pnode->key, len);
-        else
-            /* Since the keys completely differ, we seprate the two and make
-             * current key NULL
-             */
-            pnode->key = NULL;
-        pnode->value = NULL;
-        free(pnode->value);
-        free(old_key);
     } else {
         int indx = hash_it(key[0]);
         pnode->child[indx] = pnode_insert(pnode->child[indx], key, value);
