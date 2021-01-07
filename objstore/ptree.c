@@ -37,6 +37,12 @@ find_len(char *s1, char *s2, int l1, int l2)
     return len;
 }
 
+int
+hash_it(char a)
+{
+    return a-'a';
+}
+
 /* Pnode related functions */
 Pnode *
 pnode_init(char *key, char *value)
@@ -55,13 +61,11 @@ pnode_init(char *key, char *value)
 void
 pnode_insert(Pnode *pnode, char *key, char *value)
 {
-    if(pnode==NULL) {
-        pnode = pnode_init(key, value);
-    } else if (pnode->key!=NULL) {
+    if (pnode->key!=NULL) {
         /* Determine chopping positions */
         int len = find_len(pnode->key, key, strlen(pnode->key), strlen(key)),
-            indx1 = (pnode->key[len])%26,
-            indx2 = key[len]%26;
+            indx1 = hash_it(pnode->key[len]),
+            indx2 = hash_it(key[len]);
         /* Form new children nodes */
         char buf1[512] = {0}, buf2[512] = {0};
         sprintf(buf1, "%s", &(pnode->key[len]));
@@ -105,7 +109,7 @@ pnode_find(Pnode *pnode, char *key)
 
         } else {
             /* Chop the target key and recurse */
-            int indx = key[len]%26;
+            int indx = hash_it(key[len]);
             char buf[512] = {0};
             sprintf(buf, "%s", &(key[len]));
             return pnode_find(pnode->child[indx], buf);
