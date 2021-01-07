@@ -7,6 +7,12 @@
 #include"objstore/ptree.h"
 
 /* General utilities */
+/*
+ * Creates a copy of given string upto given length by allocating a new buffer.
+ * @param str: The input string to copy.
+ * @param len: The number of characters to copy, -1 indicates whole length.
+ * @return The allocated buffer, needs to be freed at later time.
+ */
 char *
 str_cpy(char *str, int len)
 {
@@ -23,6 +29,14 @@ str_cpy(char *str, int len)
     return ret;
 }
 
+/*
+ * Finds the maximum character length upto which the given strings are equal.
+ * @param s1: A char pointer to the first string.
+ * @param s2: A char pointer to the second string.
+ * @param s3: Length of the first string.
+ * @param s3: Length of the second string.
+ * @return int max length.
+ */
 int
 find_len(char *s1, char *s2, int l1, int l2)
 {
@@ -37,6 +51,12 @@ find_len(char *s1, char *s2, int l1, int l2)
     return len;
 }
 
+/*
+ * An extensible function to implement mapping of a character to its position in child array
+ * of a node.
+ * @param a: A character which needs to be hashed.
+ * @return The hashed/mapped int value.
+ */
 int
 hash_it(char a)
 {
@@ -44,6 +64,12 @@ hash_it(char a)
 }
 
 /* Pnode related functions */
+/*
+ * An initializing function for Pnode. Allocates a new node and returns a pointer to it.
+ * @param key: A char pointer to the key which will be used to store within the prefix tree.
+ * @param value: A char pointer which serves as the payload mapped by key within prefix tree.
+ * @return Pointer to a newly allocated Pnode.
+ */
 Pnode *
 pnode_init(char *key, char *value)
 {
@@ -58,6 +84,13 @@ pnode_init(char *key, char *value)
     return pnode;
 }
 
+/*
+ * Recursively insert into the prefix tree based.
+ * @param pnode: Pointer to a Pnode.
+ * @param key: Character pointer to a proper subset of key, may be chopped recursively.
+ * @param value: The payload that key will eventually map to within the tree.
+ * return Pointer to Pnode same as input parameter pnode.
+ */
 Pnode *
 pnode_insert(Pnode *pnode, char *key, char *value)
 {
@@ -99,6 +132,12 @@ pnode_insert(Pnode *pnode, char *key, char *value)
     return pnode;
 }
 
+/*
+ * Recursively find if a key mapping exists in the tree.
+ * @param pnode: Pointer to Pnode from where to being looking.
+ * @param key: Character pointer to the key for which to look for.
+ * @return NULL if key is not found or pointer to Pnode where mapped value resides.
+ */
 Pnode *
 pnode_find(Pnode *pnode, char *key)
 {
@@ -136,6 +175,11 @@ pnode_find(Pnode *pnode, char *key)
     }
 }
 
+/*
+ * Destroy and free the space recursively of a given Pnode.
+ * @param pnode: Pointer to the Pnode to recurse and eventually destroy.
+ * @return void.
+ */
 void
 pnode_deinit(Pnode *pnode)
 {

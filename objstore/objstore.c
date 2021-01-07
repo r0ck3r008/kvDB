@@ -5,6 +5,11 @@
 #include"objstore/objstore.h"
 #include "objstore/ptree.h"
 
+/*
+ * Allocate and initialize an ObjStore object and return a pointer to it.
+ * @param None.
+ * @return Pointer to initialized ObjStore object.
+ */
 ObjStore *
 objstore_init()
 {
@@ -18,6 +23,13 @@ objstore_init()
     return ost;
 }
 
+/*
+ * Insert the given key value pair into the Prefix Tree.
+ * @param ost: Pointer to the ObjStore mantaining the Prefix Tree.
+ * @param key: Character pointer to the key string.
+ * @param value: Character pointer to the value string.
+ * @return void.
+ */
 void
 objstore_insert(ObjStore *ost, char *key, char *value)
 {
@@ -25,6 +37,12 @@ objstore_insert(ObjStore *ost, char *key, char *value)
     pnode_insert(ost->tree, key, value);
 }
 
+/*
+ * Find the given key if it exists within the prefix tree beginning
+ * either from the stored current Pnode or the root of the tree.
+ * @param ost: ObjStore pointer abstracting the Prefix Tree.
+ * @param key: Character pointer to the key to look for.
+ */
 Pnode *
 objstore_find(ObjStore *ost, char *key)
 {
@@ -38,6 +56,11 @@ objstore_find(ObjStore *ost, char *key)
     return res;
 }
 
+/*
+ * Deinitialize and free the given ObjStore pointer.
+ * @param ost: Pointer to the ObjStore object to be deinitialized.
+ * @return void.
+ */
 void
 objstore_deinit(ObjStore *ost)
 {

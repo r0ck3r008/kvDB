@@ -3,6 +3,9 @@
 
 #include<stdbool.h>
 
+/*
+ * A type aliased structure which represents a single node in Prefix Tree.
+ */
 typedef struct Pnode {
     char *key, *value;
     struct Pnode *child[26];
