@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 #include<unistd.h>
 
 #include"objstore/objstore.h"
@@ -19,6 +20,28 @@ objstore_init()
         _exit(1);
     }
     ost->tree = pnode_init(NULL, NULL);
+
+    return ost;
+}
+
+ObjStore *
+objstore_read(FILE *f)
+{
+    ObjStore *ost = objstore_init();
+    char *line = NULL;
+    size_t n = 0;
+    char buf[512] = {0};
+    while(getline(&line, &n, f) != -1) {
+        snprintf(buf, n, "%s", line);
+        char *key = strtok(buf, ":");
+        char *value = strtok(NULL, ":");
+        objstore_insert(ost, key, value);
+
+        free(line);
+        line = NULL;
+        n = 0;
+        explicit_bzero(buf, sizeof(char) * 512);
+    }
 
     return ost;
 }

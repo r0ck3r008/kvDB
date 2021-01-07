@@ -1,7 +1,7 @@
 #ifndef OBJSTORE_H
 #define OBJSTORE_H
 
-#include<stdbool.h>
+#include<stdio.h>
 
 #include"objstore/ptree.h"
 
@@ -14,6 +14,7 @@ typedef struct ObjStore {
 } ObjStore;
 
 ObjStore *objstore_init();
+ObjStore *objstore_read(FILE *);
 void objstore_insert(ObjStore *, char *, char *);
 Pnode *objstore_find(ObjStore *, char *);
 void objstore_deinit(ObjStore *);
