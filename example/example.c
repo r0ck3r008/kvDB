@@ -6,28 +6,6 @@
 
 #include "objstore/objstore.h"
 
-ObjStore *
-inputDictionary(FILE *f)
-{
-    ObjStore *ost = objstore_init();
-    char *line = NULL;
-    size_t n = 0;
-    char buf[512] = {0};
-    while(getline(&line, &n, f) != -1) {
-        snprintf(buf, n, "%s", line);
-        char *key = strtok(buf, ":");
-        char *value = strtok(NULL, ":");
-        objstore_insert(ost, key, value);
-
-        free(line);
-        line = NULL;
-        n = 0;
-        explicit_bzero(buf, sizeof(char) * 512);
-    }
-
-    return ost;
-}
-
 int
 main(int argc, char **argv)
 {
@@ -40,7 +18,7 @@ main(int argc, char **argv)
         fprintf(stderr, "[-] Error in opening file %s: %s\n", argv[1], strerror(errno));
         _exit(1);
     }
-    ObjStore *ost = inputDictionary(f);
+    ObjStore *ost = objstore_read(f);
     Pnode *ret = NULL;
     if((ret=objstore_find(ost, "abate")) != NULL)
         printf("Meaning: %s\n", ret->value);
