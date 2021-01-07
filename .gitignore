@@ -2,3 +2,5 @@ tmp/*
 !tmp/.gitkeep
 bin/*
 !bin/.gitkeep
+compile_commands.json
+.cache/*
