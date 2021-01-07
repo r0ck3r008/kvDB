@@ -81,7 +81,11 @@ pnode_insert(Pnode *pnode, char *key, char *value)
         free(pnode->value);
         free(old_key);
     } else {
-        return pnode_insert(pnode->child[key[0]%26], key, value);
+        int indx = hash_it(key[0]);
+        if(pnode->child[indx]==NULL)
+            pnode->child[indx] = pnode_init(key, value);
+        else
+            return pnode_insert(pnode->child[indx], key, value);
     }
 }
 
