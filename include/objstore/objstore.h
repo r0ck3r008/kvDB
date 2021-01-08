@@ -3,6 +3,7 @@
 
 #include<stdio.h>
 
+#include"objstore/keylist.h"
 #include"objstore/ptree.h"
 
 /*
@@ -10,13 +11,14 @@
  * track of last found Pnode within the tree.
  */
 typedef struct ObjStore {
-    Pnode *tree, *curr;
+    Pnode *tree;
 } ObjStore;
 
 ObjStore *objstore_init();
 ObjStore *objstore_read(FILE *);
 void objstore_insert(ObjStore *, char *, char *);
-Pnode *objstore_find(ObjStore *, char *);
+KeyList *objstore_find(ObjStore *, char *,
+    Pnode **pnode);
 void objstore_deinit(ObjStore *);
 
 #endif /* OBJSTORE_H */

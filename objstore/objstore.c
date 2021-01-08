@@ -4,7 +4,6 @@
 #include<unistd.h>
 
 #include"objstore/objstore.h"
-#include "objstore/ptree.h"
 
 /*
  * Allocate and initialize an ObjStore object and return a pointer to it.
@@ -57,7 +56,6 @@ objstore_read(FILE *f)
 void
 objstore_insert(ObjStore *ost, char *key, char *value)
 {
-    ost->curr = NULL;
     pnode_insert(ost->tree, key, value);
 }
 
@@ -67,17 +65,13 @@ objstore_insert(ObjStore *ost, char *key, char *value)
  * @param ost: ObjStore pointer abstracting the Prefix Tree.
  * @param key: Character pointer to the key to look for.
  */
-Pnode *
-objstore_find(ObjStore *ost, char *key)
+KeyList *
+objstore_find(ObjStore *ost, char *key, Pnode **res)
 {
-    Pnode *res = NULL;
-    if(ost->curr!=NULL) {
-        res = pnode_find(ost->curr, key);
-    } else {
-        res = pnode_find(ost->tree, key);
-    }
+    KeyList *list = NULL;
+    *res = pnode_find(ost->tree, key, &list);
 
-    return res;
+    return list;
 }
 
 /*
