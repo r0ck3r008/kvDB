@@ -13,7 +13,7 @@ keylist_init(char *key)
         fprintf(stderr, "[-] KEYLIST: Malloc: Error in allocating memeory!\n");
         _exit(1);
     }
-    list->key = key;
+    sprintf(list->key, "%s", key);
 
     return list;
 }

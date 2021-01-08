@@ -2,7 +2,7 @@
 #define KEYLIST_H
 
 typedef struct KeyList {
-    char *key;
+    char key[512], *value;
     struct KeyList *next;
 } KeyList;
 
