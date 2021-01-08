@@ -42,6 +42,7 @@ objstore_read(FILE *f)
         n = 0;
         explicit_bzero(buf, sizeof(char) * 512);
     }
+    free(line);
 
     return ost;
 }
