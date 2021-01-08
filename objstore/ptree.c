@@ -80,16 +80,6 @@ chopPush(Pnode *pnode, char *key, char *value, int len)
     pnode->child[indx] = pnode_insert(pnode->child[indx], buf, value);
 }
 
-void
-pushToKeyList(Pnode *pnode, KeyList **klist)
-{
-    *klist = keylist_prepend(*klist, pnode->key, pnode->value);
-    for(int i=0; i<26; i++) {
-        if(pnode->child[i]!=NULL)
-            pushToKeyList(pnode->child[i], klist);
-    }
-}
-
 /* Pnode related functions */
 /*
  * An initializing function for Pnode. Allocates a new node and returns a pointer to it.
@@ -179,7 +169,7 @@ pnode_insert(Pnode *pnode, char *key, char *value)
  * @return NULL if key is not found or pointer to Pnode where mapped value resides.
  */
 Pnode *
-pnode_find(Pnode *pnode, char *key, KeyList **klist)
+pnode_find(Pnode *pnode, char *key)
 {
     if(pnode==NULL) {
         return NULL;
@@ -191,36 +181,28 @@ pnode_find(Pnode *pnode, char *key, KeyList **klist)
             return NULL;
         } else if(len == l2) {
             /* Return true only if both keys are totally equal */
-            if(l1 == l2) {
+            if(l1 == l2)
                 /* If both keys are equal, return current node */
                 return pnode;
-            } else {
+            else
                 /* If key is substring of pnode->key, return error.
                  * Also, note that l2 cannot be > l1 since l2 == len.
                  */
-                pushToKeyList(pnode, klist);
                 return NULL;
-            }
 
         } else {
             /* Chop the target key and recurse */
             int indx = hash_it(key[len]);
             char buf[512] = {0};
             sprintf(buf, "%s", &(key[len]));
-            Pnode *find = NULL;
-            if((find=pnode_find(pnode->child[indx], buf, klist)) == NULL) {
-                pushToKeyList(pnode, klist);
-                return NULL;
-            } else {
-                return find;
-            }
+            return pnode_find(pnode->child[indx], buf);
         }
     } else if(pnode->value!=NULL) {
         return pnode;
     } else {
         /* It is a node akin to root node, recurse to closest child */
         int indx = hash_it(key[0]);
-        return pnode_find(pnode->child[indx], key, klist);
+        return pnode_find(pnode->child[indx], key);
     }
 }
 

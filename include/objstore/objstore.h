@@ -3,7 +3,6 @@
 
 #include<stdio.h>
 
-#include"objstore/keylist.h"
 #include"objstore/ptree.h"
 
 /*
@@ -17,8 +16,7 @@ typedef struct ObjStore {
 ObjStore *objstore_init();
 ObjStore *objstore_read(FILE *);
 void objstore_insert(ObjStore *, char *, char *);
-KeyList *objstore_find(ObjStore *, char *,
-    Pnode **pnode);
+Pnode *objstore_find(ObjStore *, char *);
 void objstore_deinit(ObjStore *);
 
 #endif /* OBJSTORE_H */

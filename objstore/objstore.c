@@ -65,13 +65,10 @@ objstore_insert(ObjStore *ost, char *key, char *value)
  * @param ost: ObjStore pointer abstracting the Prefix Tree.
  * @param key: Character pointer to the key to look for.
  */
-KeyList *
-objstore_find(ObjStore *ost, char *key, Pnode **res)
+Pnode *
+objstore_find(ObjStore *ost, char *key)
 {
-    KeyList *list = NULL;
-    *res = pnode_find(ost->tree, key, &list);
-
-    return list;
+    return pnode_find(ost->tree, key);
 }
 
 /*
