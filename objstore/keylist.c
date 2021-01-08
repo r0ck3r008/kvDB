@@ -18,7 +18,7 @@ keylist_init(char *key)
 }
 
 KeyList *
-prepend(KeyList *list, char *key)
+keylist_prepend(KeyList *list, char *key)
 {
     KeyList *new = keylist_init(key);
     if(list!=NULL)
