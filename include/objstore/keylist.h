@@ -7,7 +7,7 @@ typedef struct KeyList {
 } KeyList;
 
 KeyList *keylist_init(char *);
-KeyList *keylist_prepend(KeyList *, char *);
+KeyList *keylist_prepend(KeyList *, char *, char *);
 void keylist_deinit(KeyList *);
 
 #endif /* KEYLIST_H */

@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 #include<unistd.h>
 
 #include"objstore/keylist.h"
@@ -18,13 +19,26 @@ keylist_init(char *key)
 }
 
 KeyList *
-keylist_prepend(KeyList *list, char *key)
+keylist_prepend(KeyList *list, char *key, char *value)
 {
-    KeyList *new = keylist_init(key);
-    if(list!=NULL)
-        new->next = list;
+    /* If list is NULL, create a new list and make it have the key */
+    if(list==NULL) {
+        list = keylist_init(key);
+    } else if(list->value!=NULL) {
+        /* If the node is already complete, make a new one */
+        KeyList *new = keylist_init(key);
+        new->next=list;
+        list = new;
+    } else {
+        /* If list is non-empty, append to old key */
+        strcat(list->key, key);
+    }
 
-    return new;
+    if(value!=NULL)
+        /* This is as far as this key goes */
+        list->value = value;
+
+    return list;
 }
 
 void
