@@ -80,6 +80,16 @@ chopPush(Pnode *pnode, char *key, char *value, int len)
     pnode->child[indx] = pnode_insert(pnode->child[indx], buf, value);
 }
 
+void
+pushToKeyList(Pnode *pnode, KeyList **klist)
+{
+    *klist = keylist_prepend(*klist, pnode->key, pnode->value);
+    for(int i=0; i<26; i++) {
+        if(pnode->child[i]!=NULL)
+            pushToKeyList(pnode->child[i], klist);
+    }
+}
+
 /* Pnode related functions */
 /*
  * An initializing function for Pnode. Allocates a new node and returns a pointer to it.
