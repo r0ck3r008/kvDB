@@ -6,7 +6,7 @@
 #include<ctype.h>
 #include<errno.h>
 
-#include "objstore/objstore.h"
+#include "../kvdb.h"
 
 #define MAXLINES 120000
 
