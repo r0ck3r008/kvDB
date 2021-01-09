@@ -6,8 +6,7 @@
 #include"objstore/ptree.h"
 
 /*
- * A type aliased structure encapsulating the Prefix Tree and keeping
- * track of last found Pnode within the tree.
+ * A type aliased structure encapsulating the Prefix Tree.
  */
 typedef struct ObjStore {
     Pnode *tree;

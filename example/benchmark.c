@@ -10,15 +10,25 @@
 
 #define MAXLINES 120000
 
+/*
+ * Trim the input string starting from right most position.
+ * @param str: The input string.
+ * @return The trimmed string.
+ */
 char *
-rtrim(char *s)
+rtrim(char *str)
 {
-    char* back = s + strlen(s);
+    char *back = str + strlen(str);
     while(isspace(*--back));
     *(back+1) = '\0';
-    return s;
+    return str;
 }
 
+/*
+ * Read the given dictionary file and store its keys in an array of strings.
+ * @param f: A pointer to opened FILE.
+ * @return A pointer to key strings.
+ */
 char **
 readin_file(FILE *f)
 {
@@ -43,6 +53,11 @@ readin_file(FILE *f)
     return words;
 }
 
+/*
+ * Free the previously allocated keys array.
+ * @param words: A pointer to keys.
+ * @return void.
+ */
 void
 free_file(char **words)
 {
@@ -54,6 +69,12 @@ free_file(char **words)
     free(words);
 }
 
+/*
+ * The function used to run fetch/lookup for all the provided keys.
+ * @param ost: Pointer to a allocated and initiated ObjStore.
+ * @param words: A pointer keys that need to be looked up.
+ * @return The number of keys successfully looked up.
+ */
 int
 benchmark(ObjStore *ost, char **words)
 {

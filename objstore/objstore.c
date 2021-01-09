@@ -6,13 +6,18 @@
 
 #include"objstore/objstore.h"
 
+/*
+ * Trim the input stirng from the right.
+ * @param s: A pointer to string.
+ * return A pointer to the trimmed string.
+ */
 char *
-rtrim(char *s)
+rtrim(char *str)
 {
-    char* back = s + strlen(s);
+    char* back = str + strlen(str);
     while(isspace(*--back));
     *(back+1) = '\0';
-    return s;
+    return str;
 }
 
 /*
@@ -33,6 +38,12 @@ objstore_init()
     return ost;
 }
 
+/*
+ * Use the provided file to read in delimited key-value pair and
+ * insert into the Prefix tree.
+ * @param f: A pointer to opened FILE.
+ * @return Allocated and filled ObjStore instance.
+ */
 ObjStore *
 objstore_read(FILE *f)
 {
