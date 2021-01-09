@@ -118,8 +118,8 @@ pnode_insert(Pnode *pnode, char *key, char *value)
         int l1 = strlen(pnode->key), l2 = strlen(key),
             len = find_len(pnode->key, key, l1, l2);
         if(len == l1 && len == l2) {
-            fprintf(stderr, "[-] Cannot Add duplicate keys!\n");
-            _exit(1);
+            /* This is a duplicate, return */
+            return pnode;
         } else if(len == l1) {
             /* Chop and push the new key further down and skip current one */
             chopPush(pnode, key, value, len);
