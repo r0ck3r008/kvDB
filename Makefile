@@ -10,7 +10,7 @@ all: example
 
 .PHONY: example
 example: libkvdb.so
-	${COMPILER} example/example.c -I${COMPILE_PATH} -Lbin/ -lkvdb -g -o bin/example.out
+	${COMPILER} example/benchmark.c -I${COMPILE_PATH} -Lbin/ -lkvdb -g -o bin/benchmark.out
 
 libkvdb.so: objstore_objs
 	${COMPILER} ${LIB_OBJS} ${LIB_LINKER_FLAGS} -o bin/libkvdb.so
