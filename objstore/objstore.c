@@ -2,8 +2,18 @@
 #include<stdlib.h>
 #include<string.h>
 #include<unistd.h>
+#include<ctype.h>
 
 #include"objstore/objstore.h"
+
+char *
+rtrim(char *s)
+{
+    char* back = s + strlen(s);
+    while(isspace(*--back));
+    *(back+1) = '\0';
+    return s;
+}
 
 /*
  * Allocate and initialize an ObjStore object and return a pointer to it.
@@ -33,6 +43,7 @@ objstore_read(FILE *f)
     while(getline(&line, &n, f) != -1) {
         snprintf(buf, n, "%s", line);
         char *key = strtok(buf, ":");
+        key = rtrim(key);
         char *value = strtok(NULL, ":");
         objstore_insert(ost, key, value);
 
